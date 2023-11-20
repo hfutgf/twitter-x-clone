@@ -1,12 +1,31 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useCallback } from "react";
 import Button from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import useRegisterModal from "@/hooks/useRegisterModal";
+import RegisterModal from "../modals/register-modal";
+import useLoaginModal from "@/hooks/useLoginModal";
+import LoginModal from "../modals/login-modal";
 
 export default function Auth() {
+  const registerModal = useRegisterModal();
+  const loginModal = useLoaginModal();
+
+  const onOpenRegisterModal = useCallback(() => {
+    registerModal.onOpen();
+  }, [registerModal]);
+
+  const onOpenLoginModal = useCallback(() => {
+    loginModal.onOpen();
+  }, [loginModal]);
+
   return (
     <>
+      <RegisterModal />
+      <LoginModal />
+
       <div className=" grid grid-cols-1 md:grid-cols-2 gap-10 items-center h-screen">
         <Image
           src={"/images/x.svg"}
@@ -48,11 +67,16 @@ export default function Auth() {
                 <p className="mx-4">or</p>
                 <div className="h-px bg-gray-700 w-1/2" />
               </div>
-              <Button label="Create account" fullWidth />
+              <Button
+                label="Create account"
+                fullWidth
+                onClick={onOpenRegisterModal}
+              />
               <div className="text-[10px] text-gray-400">
                 By singning up, you agree to the
                 <span className="text-sky-500"> Terms of Service </span> and
-                <span className="text-sky-500"> Privacy Policy </span> , including
+                <span className="text-sky-500"> Privacy Policy </span> ,
+                including
                 <span className="text-sky-500"> Cookie use </span>
               </div>
             </div>
@@ -61,7 +85,12 @@ export default function Auth() {
             <h3 className="font-medium text-xl mb-4">
               Already have an account?
             </h3>
-            <Button label="Sing in" fullWidth outline />
+            <Button
+              onClick={onOpenLoginModal}
+              label="Sing in"
+              fullWidth
+              outline
+            />
           </div>
         </div>
       </div>
