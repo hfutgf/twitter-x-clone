@@ -16,9 +16,12 @@ import Button from "../ui/button";
 import * as z from "zod";
 import { loginSchema } from "@/lib/validation";
 import useRegisterModal from "@/hooks/useRegisterModal";
+import axios from "axios";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function LoginModal() {
-  const [data, setData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const loginModal = useLoaginModal();
 
   const registerModal = useRegisterModal();
@@ -36,8 +39,21 @@ export default function LoginModal() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    setData(values);
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    try {
+      const { data } = await axios.post("/api/auth/login", values);
+      if (data.success) {
+        loginModal.onClose();
+      }
+    } catch (e: any) {
+      if (e.response.data.error) {
+        if (e.response.data.error) {
+          setError(e.response.data.error);
+        } else {
+          setError("Someting went wrong. Please try againg later.");
+        }
+      }
+    }
   }
 
   const { isSubmitting } = form.formState;
@@ -45,6 +61,13 @@ export default function LoginModal() {
   const bodyConetent = (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-12 ">
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         <FormField
           control={form.control}
           name="email"
@@ -64,7 +87,7 @@ export default function LoginModal() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Password" {...field} />
+                <Input type="password" placeholder="Password" {...field} />
               </FormControl>
 
               <FormMessage />
