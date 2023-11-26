@@ -12,9 +12,9 @@ interface Props {
 }
 
 export default async function Layout({ children }: Props) {
-  const session: any = await getServerSession(authOptions);
+  const user: any = await getServerSession(authOptions);
 
-  if (!session) {
+  if (!user) {
     return (
       <div className="container h-screen mx-auto max-w-7xl">
         <Auth />
@@ -25,7 +25,7 @@ export default async function Layout({ children }: Props) {
   return (
     <div className="lg:container h-screen mx-auto lg:max-w-7xl">
       <div className="flex">
-        <Sidebar />
+        <Sidebar user={user} />
         <div className="flex flex-1 border-x-[1px] border-neutral-800 lg:mx-4 ml-1">
           <div className="w-full">
             <NextTopLoader

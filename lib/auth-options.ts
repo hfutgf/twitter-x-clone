@@ -4,7 +4,6 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectToDatabase } from "./mongoose";
 import User from "@/database/user.model";
-import * as bcrypt from "bcrypt";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -54,7 +53,6 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  debug: process.env.NODE_ENV === "development",
   session: { strategy: "jwt" },
   jwt: { secret: process.env.JWT_SECRET! },
   secret: process.env.NEXTAUTH_SECRET!,
