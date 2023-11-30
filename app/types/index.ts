@@ -16,3 +16,13 @@ export interface IUser {
   notifications: string[];
   isFollowing: boolean;
 }
+
+export interface IPost {
+  body: string;
+  comments: string[];
+  createdAt: Date;
+  likes: string[];
+  updatedAt: Date;
+  user: IUser;
+  _id: string;
+}
