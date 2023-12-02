@@ -24,7 +24,7 @@ export default function Form({ placeholder, user, setPosts }: Props) {
         userId: user._id,
       });
 
-      const newPost = { ...data, user };
+      const newPost = { ...data, user, likes: 0, comments: 0, hasLiked: false };
       setPosts((prev) => [newPost, ...prev]);
 
       setIsLoading(false);
@@ -33,7 +33,6 @@ export default function Form({ placeholder, user, setPosts }: Props) {
         title: "Success",
         description: "Post created successfully.",
       });
-
     } catch (error) {
       toast({
         title: "Error",

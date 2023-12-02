@@ -42,6 +42,51 @@ export default function PostIemt({ post, user, setPosts }: Props) {
     }
   };
 
+  const onLike = async () => {
+    try {
+      setIsLoading(true);
+
+      if (post.hasLiked) {
+        await axios.delete("/api/likes", {
+          data: {
+            postId: post._id,
+            userId: user._id,
+          },
+        });
+        const updatePosts = {
+          ...post,
+          hasLiked: false,
+          likes: +post.likes - 1,
+        };
+        setPosts((prev) =>
+          prev.map((p) => (p._id === post._id ? updatePosts : p))
+        );
+      } else {
+        await axios.put("/api/likes", {
+          postId: post._id,
+          userId: user._id,
+        });
+        const updatePosts = {
+          ...post,
+          hasLiked: true,
+          likes: +post.likes + 1,
+        };
+        setPosts((prev) =>
+          prev.map((p) => (p._id === post._id ? updatePosts : p))
+        );
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      return toast({
+        title: "Error",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition relative">
       {isLoading && (
@@ -75,12 +120,15 @@ export default function PostIemt({ post, user, setPosts }: Props) {
           <div className="flex flex-row itmes-center mt-3 gap-10">
             <div className="flex flex-row  items-center text-neutral-500  gap-2 cursor-pointer transition hover:text-sky-500">
               <AiOutlineMessage size={20} />
-              <p>{post.comments.length || 0}</p>
+              <p>{post.comments || 0}</p>
             </div>
 
-            <div className="flex flex-row  items-center text-neutral-500  gap-2 cursor-pointer transition hover:text-red-500">
-              <FaHeart size={20} />
-              <p>{post.likes.length}</p>
+            <div
+              onClick={onLike}
+              className={`flex flex-row  items-center text-neutral-500  gap-2 cursor-pointer transition hover:text-red-500`}
+            >
+              <FaHeart size={20} color={post.hasLiked ? "red" : ""} />
+              <p>{post.likes || 0}</p>
             </div>
 
             {post.user._id === user._id && (

@@ -2,7 +2,7 @@
 import { IPost } from "@/app/types";
 import Form from "@/components/shared/form";
 import Header from "@/components/shared/header";
-import PostIemt from "@/components/shared/postItem";
+import PostIemt from "@/components/shared/post-item";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -29,7 +29,7 @@ export default function Page() {
   }, []);
   return (
     <div>
-      <Header label="Home" isBack={true} />
+      <Header label="Home" />
       {isLoading || status === "loading" ? (
         <div className="flex justify-center items-center h-24">
           <Loader2 className="animate-spin text-sky-500" />
@@ -43,7 +43,7 @@ export default function Page() {
           />
           {posts.map((post: IPost) => (
             <PostIemt
-            setPosts={setPosts}
+              setPosts={setPosts}
               key={post._id}
               post={post}
               user={JSON.parse(JSON.stringify(session.currentUser))}

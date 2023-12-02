@@ -19,10 +19,11 @@ export interface IUser {
 
 export interface IPost {
   body: string;
-  comments: string[];
+  comments: number;
   createdAt: Date;
-  likes: string[];
+  likes: number;
   updatedAt: Date;
   user: IUser;
   _id: string;
+  hasLiked: boolean;
 }

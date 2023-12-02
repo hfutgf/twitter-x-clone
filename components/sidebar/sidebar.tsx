@@ -22,12 +22,12 @@ export default function Sidebar({ user }: Props) {
     },
     {
       label: "Notifications",
-      path: `/notifications/${user.currentUser._id}`,
+      path: `/notifications/${user?.currentUser?._id}`,
       icon: Bell,
     },
     {
       label: "Profile",
-      path: `/profile/${user.currentUser._id}`,
+      path: `/profile/${user?.currentUser?._id}`,
       icon: User,
     },
   ];
