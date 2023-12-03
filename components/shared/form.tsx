@@ -10,29 +10,57 @@ interface Props {
   placeholder: string;
   user: IUser;
   setPosts: Dispatch<SetStateAction<IPost[]>>;
+  postId?: string;
+  isComment?: boolean;
 }
 
-export default function Form({ placeholder, user, setPosts }: Props) {
+export default function Form({
+  placeholder,
+  user,
+  setPosts,
+  isComment,
+  postId,
+}: Props) {
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.post("/api/posts", {
-        body,
-        userId: user._id,
-      });
 
-      const newPost = { ...data, user, likes: 0, comments: 0, hasLiked: false };
-      setPosts((prev) => [newPost, ...prev]);
+      if (isComment) {
+        const { data } = await axios.post("/api/comments", {
+          body,
+          userId: user._id,
+          postId,
+        });
+
+        const newComment = {
+          ...data,
+          user,
+          likes: 0,
+          hasLiked: false,
+        };
+
+        setPosts((prev) => [newComment, ...prev]);
+      } else {
+        const { data } = await axios.post("/api/posts", {
+          body,
+          userId: user._id,
+        });
+
+        const newPost = {
+          ...data,
+          user,
+          likes: 0,
+          comments: 0,
+          hasLiked: false,
+        };
+        setPosts((prev) => [newPost, ...prev]);
+      }
 
       setIsLoading(false);
       setBody("");
-      toast({
-        title: "Success",
-        description: "Post created successfully.",
-      });
     } catch (error) {
       toast({
         title: "Error",
@@ -52,7 +80,7 @@ export default function Form({ placeholder, user, setPosts }: Props) {
         </Avatar>
         <div className="w-full">
           <textarea
-            className="disabled:opacity-80 peer resize-none mt-3 w-full bg-black ring-0 outline-none text-[20xp] placeholder-neutral-500  text-white h-[50px]z"
+            className="disabled:opacity-80 peer resize-none mt-3 w-full bg-black ring-0 outline-none text-[20xp] placeholder-neutral-500  text-white h-[50px]"
             placeholder={placeholder}
             disabled={isLoading}
             value={body}
@@ -62,7 +90,7 @@ export default function Form({ placeholder, user, setPosts }: Props) {
           <hr className="opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-800 transition" />
           <div className="mt-4 flex flex-row justify-end">
             <Button
-              label="Post"
+              label={isComment ? "Reply  " : "Post"}
               className="px-8"
               disabled={isLoading || !body}
               onClick={onSubmit}
