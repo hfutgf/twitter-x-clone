@@ -12,7 +12,11 @@ import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-const PostPage = ({ params }: { params: { postId: string } }) => {
+interface Props {
+  params: { postId: string };
+}
+
+const PostPage = ({ params }: Props) => {
   const { data: session, status }: any = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingComment, setIsFetchingComment] = useState(false);
