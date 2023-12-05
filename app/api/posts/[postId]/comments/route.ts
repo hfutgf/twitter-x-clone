@@ -26,20 +26,24 @@ export async function GET(req: Request, route: { params: { postId: string } }) {
       })
       .sort({ createdAt: -1 });
 
-    const filteredComments = post.comments.map((item: any) => ({
+    console.log(post.comments[1]);
+
+    const filteredComments = post?.comments.map((item: any) => ({
       body: item.body,
       createdAt: item.createdAt,
       user: {
-        _id: item.user._id,
-        name: item.user.name,
+        _id: item.user?._id,
+        name: item.user?.name,
         username: item.user?.username,
         profileImage: item.user?.profileImage,
-        email: item.user.email,
+        email: item.user?.email,
       },
-      likes: item?.likes?.length,
-      hasLiked: item?.likes?.includes(currentUser._id),
-      _id: item._id,  
+      likes: item.likes?.length,
+      // hasLiked: item.likes?.includes(currentUser._id),
+      _id: item._id,
     }));
+
+    console.log(filteredComments)
 
     return NextResponse.json(filteredComments);
   } catch (error) {

@@ -106,7 +106,13 @@ const PostPage = ({ params }: Props) => {
           ) : (
             <>
               {comments.map((comment) => (
-                <CommentItem comment={comment} key={comment._id} />
+                <CommentItem
+                  comments={comments}
+                  setComments={setComments}
+                  comment={comment}
+                  key={comment._id}
+                  user={JSON.parse(JSON.stringify(session.currentUser))}
+                />
               ))}
             </>
           )}
