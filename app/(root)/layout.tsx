@@ -4,8 +4,14 @@ import { authOptions } from "@/lib/auth-options";
 import { getServerSession } from "next-auth";
 import React from "react";
 import NextTopLoader from "nextjs-toploader";
-import Sidebar from "@/components/sidebar/sidebar";
-import Followbar from "@/components/shared/followbar";
+import dynamic from "next/dynamic";
+
+const Sidebar = dynamic(() => import("@/components/sidebar/sidebar"), {
+  loading: () => <p>Loading...</p>
+});
+const Followbar = dynamic(() => import("@/components/shared/followbar"), {
+  loading: () => <p>Loading...</p>
+});
 
 interface Props {
   children: React.ReactNode;

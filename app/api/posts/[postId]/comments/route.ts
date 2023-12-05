@@ -14,36 +14,37 @@ export async function GET(req: Request, route: { params: { postId: string } }) {
 
     const { postId } = route.params;
 
-    const post = await Post.findById(postId)
-      .populate({
-        path: "comments",
-        model: Comment,
-        populate: {
-          path: "user",
-          model: User,
-          select: "name email profileImage _id username",
-        },
-      })
-      .sort({ createdAt: -1 });
-
-    console.log(post.comments[1]);
-
-    const filteredComments = post?.comments.map((item: any) => ({
-      body: item.body,
-      createdAt: item.createdAt,
-      user: {
-        _id: item.user?._id,
-        name: item.user?.name,
-        username: item.user?.username,
-        profileImage: item.user?.profileImage,
-        email: item.user?.email,
+    const post = await Post.findById(postId).populate({
+      path: "comments",
+      model: Comment,
+      populate: {
+        path: "user",
+        model: User,
+        select: "name email profileImage _id username",
       },
-      likes: item.likes?.length,
-      // hasLiked: item.likes?.includes(currentUser._id),
-      _id: item._id,
-    }));
+      options: {
+        sort: {
+          likes: -1,
+        },
+      },
+    });
 
-    console.log(filteredComments)
+    const filteredComments = post?.comments.map((item: any) => {
+      return {
+        body: item.body,
+        createdAt: item.createdAt,
+        user: {
+          _id: item.user?._id,
+          name: item.user?.name,
+          username: item.user?.username,
+          profileImage: item.user?.profileImage,
+          email: item.user?.email,
+        },
+        likes: item.likes?.length,
+        hasLiked: item.likes?.includes?.(currentUser._id),
+        _id: item._id,
+      };
+    });
 
     return NextResponse.json(filteredComments);
   } catch (error) {

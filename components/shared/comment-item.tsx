@@ -20,7 +20,6 @@ interface Props {
 const CommentItem = ({ comment, user, setComments, comments }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-
   const onLike = async () => {
     try {
       setIsLoading(true);
@@ -65,12 +64,9 @@ const CommentItem = ({ comment, user, setComments, comments }: Props) => {
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.delete("/api/comments", {
-        data: {
-          commentId: comment._id,
-        },
-      });
-      setComments((prev) => prev.filter((c) => c._id !== comment._id));
+      await axios.delete(`/api/comments/${comment._id}`);
+      const updateComments = comments.filter((c) => c._id !== comment._id);
+      setComments(updateComments);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

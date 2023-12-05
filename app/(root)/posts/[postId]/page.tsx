@@ -42,8 +42,8 @@ const PostPage = ({ params }: Props) => {
       setComments(data);
       setIsFetchingComment(false);
     } catch (error) {
-      console.log(error);
       setIsFetchingComment(false);
+      console.log(error);
     }
   };
 

@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Twitter",
-  icons:'/images/x.svg'
+  icons: "/images/x.svg",
 };
 
 export default function RootLayout({
