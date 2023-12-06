@@ -5,7 +5,7 @@ import Button from "../ui/button";
 import { Loader2 } from "lucide-react";
 import User from "./user";
 import useUsers from "@/hooks/useUsers";
-import { IUser } from "@/app/types";
+import { IUser } from "@/types";
 import Link from "next/link";
 
 export default function Followbar() {
@@ -29,7 +29,7 @@ export default function Followbar() {
         ) : (
           <div className="flex flex-col gap-6 mt-4">
             {users.map((user: IUser) => (
-              <Link key={user._id} href={`profile/${user._id}`}>
+              <Link key={user._id} href={`/profile/${user._id}`}>
                 <User user={user} />
               </Link>
             ))}

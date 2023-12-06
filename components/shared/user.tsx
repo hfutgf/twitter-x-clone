@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { IUser } from "@/app/types";
+import { IUser } from "@/types";
 import { sliceText } from "@/lib/utils";
 
 interface Props {

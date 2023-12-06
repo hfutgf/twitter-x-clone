@@ -7,7 +7,7 @@ import React from "react";
 import SidebarItem from "./sidebarItem";
 import SidebarPostButton from "./sidebarPostButton";
 import SidebarAccount from "./sidebarAccount";
-import { IUser } from "@/app/types";
+import { IUser } from "@/types";
 
 interface Props {
   user: IUser;
@@ -22,12 +22,12 @@ export default function Sidebar({ user }: Props) {
     },
     {
       label: "Notifications",
-      path: `/notifications/${user?.currentUser?._id}`,
+      path: `/notifications/${user?._id}`,
       icon: Bell,
     },
     {
       label: "Profile",
-      path: `/profile/${user?.currentUser?._id}`,
+      path: `/profile/${user?._id}`,
       icon: User,
     },
   ];
@@ -45,7 +45,7 @@ export default function Sidebar({ user }: Props) {
         ))}
         <SidebarPostButton />
       </div>
-      <SidebarAccount user={user.currentUser} />
+      <SidebarAccount user={user} />
     </section>
   );
 }

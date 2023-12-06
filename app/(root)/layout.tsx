@@ -7,10 +7,10 @@ import NextTopLoader from "nextjs-toploader";
 import dynamic from "next/dynamic";
 
 const Sidebar = dynamic(() => import("@/components/sidebar/sidebar"), {
-  loading: () => <p>Loading...</p>
+  loading: () => <p>Loading...</p>,
 });
 const Followbar = dynamic(() => import("@/components/shared/followbar"), {
-  loading: () => <p>Loading...</p>
+  loading: () => <p>Loading...</p>,
 });
 
 interface Props {
@@ -18,9 +18,9 @@ interface Props {
 }
 
 export default async function Layout({ children }: Props) {
-  const user: any = await getServerSession(authOptions);
+  const session: any = await getServerSession(authOptions);
 
-  if (!user) {
+  if (!session) {
     return (
       <div className="container h-screen mx-auto max-w-7xl">
         <Auth />
@@ -31,20 +31,20 @@ export default async function Layout({ children }: Props) {
   return (
     <div className="lg:container h-screen mx-auto lg:max-w-7xl">
       <div className="flex">
-        <Sidebar user={user} />
+        <Sidebar user={JSON.parse(JSON.stringify(session.currentUser))} />
         <div className="flex flex-1 border-x-[1px] border-neutral-800 lg:mx-4 ml-1">
           <div className="w-full">
-            <NextTopLoader
-              color="#2299dd"
+            {/* <NextTopLoader
+              color="#2299DD"
               initialPosition={0.08}
               crawlSpeed={200}
               height={3}
               crawl={true}
-              showSpinner={true}
+              showSpinner={false}
               easing="ease"
               speed={200}
-              shadow="0 0 10px #2299dd,0 0 5 #2299dd"
-            />
+              shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+            /> */}
             {children}
             <Toaster />
           </div>

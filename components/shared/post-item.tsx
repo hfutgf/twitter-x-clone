@@ -1,6 +1,6 @@
 "use client";
 
-import { IPost, IUser } from "@/app/types";
+import { IPost, IUser } from "@/types";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { sliceText } from "@/lib/utils";
@@ -18,7 +18,7 @@ interface Props {
   setPosts: Dispatch<SetStateAction<IPost[]>>;
 }
 
-export default function PostIemt({ post, user, setPosts }: Props) {
+export default function PostItem({ post, user, setPosts }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();

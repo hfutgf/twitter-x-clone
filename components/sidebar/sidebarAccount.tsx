@@ -1,6 +1,6 @@
 "use client";
 
-import { IUser } from "@/app/types";
+import { IUser } from "@/types";
 import React from "react";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";

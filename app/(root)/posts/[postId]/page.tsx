@@ -1,6 +1,6 @@
 "use client";
 
-import { IPost } from "@/app/types";
+import { IPost } from "@/types";
 import CommentItem from "@/components/shared/comment-item";
 import Form from "@/components/shared/form";
 import Header from "@/components/shared/header";

@@ -1,5 +1,5 @@
 "use client";
-import { IPost, IUser } from "@/app/types";
+import { IPost, IUser } from "@/types";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Button from "../ui/button";

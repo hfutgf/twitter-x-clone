@@ -1,8 +1,8 @@
 "use client";
-import { IPost } from "@/app/types";
+import { IPost } from "@/types";
 import Form from "@/components/shared/form";
 import Header from "@/components/shared/header";
-import PostIemt from "@/components/shared/post-item";
+import PostItem from "@/components/shared/post-item";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -42,7 +42,7 @@ export default function Page() {
             user={JSON.parse(JSON.stringify(session.currentUser))}
           />
           {posts.map((post: IPost) => (
-            <PostIemt
+            <PostItem
               setPosts={setPosts}
               key={post._id}
               post={post}
