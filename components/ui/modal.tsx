@@ -11,6 +11,7 @@ interface ModalProps {
   step?: number;
   totalSteps?: number;
   isEditing?: boolean;
+  className?: string;
 }
 
 export default function Modal({
@@ -21,13 +22,15 @@ export default function Modal({
   step,
   totalSteps,
   isEditing,
+  className,
 }: ModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className={cn(
           "bg-black p-1",
-          isEditing && "h-[80vh] overflow-x-hidden overflow-y-auto"
+          isEditing && "h-[80vh] overflow-x-hidden overflow-y-auto",
+          className
         )}
       >
         <div className="flex items-center gap-6">
