@@ -35,7 +35,7 @@ export default function SidebarAccount({ user }: Props) {
               <div className="flex flex-col items-center">
                 <p>{user.name}</p>
                 {user.username ? (
-                  <p className="opacity-40">{user.username}</p>
+                  <p className="opacity-40">@{user.username}</p>
                 ) : (
                   <p className="opacity-40">Manage account</p>
                 )}

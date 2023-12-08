@@ -18,6 +18,7 @@ import Button from "../ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import useEditModal from "@/hooks/useEditModal";
+import { toast } from "../ui/use-toast";
 
 interface Props {
   user: IUser;
@@ -31,23 +32,34 @@ const EditForm = ({ user }: Props) => {
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      name: user.name || " ",
-      username: user.username || " ",
-      bio: user.bio || " ",
-      location: user.location || " ",
+      name: user.name || "",
+      username: user.username || "",
+      bio: user.bio || "",
+      location: user.location || "",
     },
   });
 
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof userSchema>) => {
-    console.log(values);
     try {
       await axios.put(`/api/users/${user._id}`, values);
       router.refresh();
       editModal.onClose();
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.data.error) {
+        return toast({
+          title: "Error",
+          description: error.response.data.error,
+          variant: "destructive",
+        });
+      } else {
+        return toast({
+          title: "Error",
+          description: "Something went wrong. Please try again later.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -60,10 +72,10 @@ const EditForm = ({ user }: Props) => {
         <FormField
           control={form.control}
           name="name"
-          render={({ filed }: any) => (
+          render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Name" {...filed} />
+                <Input placeholder="Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -73,10 +85,10 @@ const EditForm = ({ user }: Props) => {
         <FormField
           control={form.control}
           name="username"
-          render={({ filed }: any) => (
+          render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Username" {...filed} />
+                <Input placeholder="Username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -86,10 +98,10 @@ const EditForm = ({ user }: Props) => {
         <FormField
           control={form.control}
           name="location"
-          render={({ filed }: any) => (
+          render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Location" {...filed} />
+                <Input placeholder="Location" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,25 +111,25 @@ const EditForm = ({ user }: Props) => {
         <FormField
           control={form.control}
           name="bio"
-          render={({ filed }: any) => (
+          render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="Bio" {...filed} />
+                <Textarea placeholder="Bio" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-      </form>
 
-      <Button
-        type="submit"
-        label="Save"
-        secondary
-        large
-        fullWidth
-        disabled={isSubmitting}
-      />
+        <Button
+          type="submit"
+          label={"Save"}
+          secondary
+          large
+          fullWidth
+          disabled={isSubmitting}
+        />
+      </form>
     </Form>
   );
 };
