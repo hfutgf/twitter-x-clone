@@ -13,6 +13,7 @@ import Modal from "../ui/modal";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import User from "../shared/user";
+import Link from "next/link";
 
 interface Props {
   user: IUser;
@@ -107,7 +108,7 @@ const ProfileBio = ({ user, userId }: Props) => {
   return (
     <>
       <EditModal user={user} />
-      
+
       <div className="border-b-[1px] border-neutral-800 pb-4">
         <div className="flex justify-end p-2">
           {userId === user._id ? (
@@ -217,8 +218,8 @@ const ProfileBio = ({ user, userId }: Props) => {
                         <User
                           onChangeFollowing={onChangeFollowing}
                           user={user}
-                          key={user._id}
                           isFollow
+                          key={user._id}
                           following={following}
                         />
                       ))

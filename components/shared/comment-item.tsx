@@ -9,6 +9,7 @@ import { FaHeart } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   comment: IPost;
@@ -19,6 +20,8 @@ interface Props {
 
 const CommentItem = ({ comment, user, setComments, comments }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const { push } = useRouter();
 
   const onLike = async () => {
     try {
@@ -73,6 +76,12 @@ const CommentItem = ({ comment, user, setComments, comments }: Props) => {
       console.log(error);
     }
   };
+
+  const goToProfile = (evt: any) => {
+    evt.stopPropagation();
+    push(`/profile/${comment.user._id}`);
+  };
+
   return (
     <div className="border-b-[1px] relative border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition">
       {isLoading && (
@@ -84,12 +93,15 @@ const CommentItem = ({ comment, user, setComments, comments }: Props) => {
       )}
       <div>
         <div className="flex flex-row items-center gap-3 cursor-pointer">
-          <Avatar>
+          <Avatar onClick={goToProfile}>
             <AvatarImage src={comment?.user.profileImage} />
             <AvatarFallback>{comment?.user.name[0]}</AvatarFallback>
           </Avatar>
           <div>
-            <div className="flex flex-row items-center gap-2">
+            <div
+              className="flex flex-row items-center gap-2"
+              onClick={goToProfile}
+            >
               <p className="text-white font-semibold cursor-pointer hover:underline">
                 {comment?.user.name}
               </p>

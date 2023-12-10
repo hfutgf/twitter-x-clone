@@ -1,3 +1,4 @@
+import Notification from "@/database/notification.model";
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/mongoose";
 import { NextResponse } from "next/server";
@@ -8,12 +9,24 @@ export async function PUT(req: Request) {
 
     const { userId, currentUserId } = await req.json();
 
-    await User.findByIdAndUpdate(userId, {
-      $push: { followers: currentUserId },
-    });
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: { followers: currentUserId },
+        $set: {
+          hasNewNotifications: true,
+        },
+      },
+      { new: true }
+    );
 
     await User.findByIdAndUpdate(currentUserId, {
       $push: { following: userId },
+    });
+
+    await Notification.create({
+      user: userId,
+      body: "Somone followed you!",
     });
 
     return NextResponse.json({ message: "Followed" });
@@ -35,6 +48,10 @@ export async function DELETE(req: Request) {
 
     await User.findByIdAndUpdate(currentUserId, {
       $pull: { following: userId },
+    });
+
+    await Notification.findOneAndDelete({
+      user: userId,
     });
 
     return NextResponse.json({ onFollowed: "Followed" });

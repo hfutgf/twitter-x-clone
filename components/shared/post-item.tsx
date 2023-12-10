@@ -96,6 +96,11 @@ export default function PostItem({ post, user, setPosts }: Props) {
     router.push(`/posts/${post._id}`);
   };
 
+  const goToProfile = (evt: any) => {
+    evt.stopPropagation();
+    router.push(`/profile/${post.user._id}`);
+  };
+
   return (
     <div className="border-b-[1px] border-neutral-800 p-5 cursor-pointer hover:bg-neutral-900 transition relative">
       {isLoading && (
@@ -110,12 +115,15 @@ export default function PostItem({ post, user, setPosts }: Props) {
         onClick={goToPost}
         className="flex flex-row items-center gap-3 cursor-pointer"
       >
-        <Avatar>
+        <Avatar onClick={goToProfile}>
           <AvatarImage src={post.user.profileImage} />
           <AvatarFallback>{post.user.name[0]}</AvatarFallback>
         </Avatar>
         <div>
-          <div className="flex flex-row items-center gap-2">
+          <div
+            className="flex flex-row items-center gap-2"
+            onClick={goToProfile}
+          >
             <p className="text-white font-semibold cursor-pointer hover:underline">
               {post.user.name}
             </p>

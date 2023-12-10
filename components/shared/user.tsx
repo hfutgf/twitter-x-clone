@@ -27,7 +27,8 @@ export default function User({
 
   const router = useRouter();
 
-  const onUnfollow = async () => {
+  const onUnfollow = async (evt: any) => {
+    evt.stopPropagation();
     try {
       setIsLoading(true);
       await axios.delete("/api/follows", {
@@ -44,7 +45,8 @@ export default function User({
     }
   };
 
-  const onFollow = async () => {
+  const onFollow = async (evt: any) => {
+    evt.stopPropagation();
     try {
       setIsLoading(true);
       await axios.put("/api/follows", {
@@ -62,8 +64,16 @@ export default function User({
     }
   };
 
+  const goToProfile = (evt: any) => {
+    evt.stopPropagation();
+    router.push(`/profile/${user._id}`);
+  };
+
   return (
-    <div className="flex gap-3 items-center justify-between cursor-pointer hover:bg-slate-300/10 transition rounded-md py-2 px-3">
+    <div
+      onClick={goToProfile}
+      className="flex gap-3 items-center justify-between cursor-pointer hover:bg-slate-300/10 transition rounded-md py-2 px-3"
+    >
       <div className="flex gap-2 cursor-pointer">
         <Avatar>
           <AvatarImage src={user.profileImage} />

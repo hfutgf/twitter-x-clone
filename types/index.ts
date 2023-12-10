@@ -27,3 +27,9 @@ export interface IPost {
   _id: string;
   hasLiked: boolean;
 }
+
+export interface INotification {
+  _id: string;
+  body: string;
+  user: IUser;
+}

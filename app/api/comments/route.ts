@@ -1,5 +1,7 @@
 import Comment from "@/database/comment.model";
+import Notification from "@/database/notification.model";
 import Post from "@/database/post.model";
+import User from "@/database/user.model";
 import { authOptions } from "@/lib/auth-options";
 import { connectToDatabase } from "@/lib/mongoose";
 import { getServerSession } from "next-auth";
@@ -16,8 +18,20 @@ export async function POST(req: Request) {
       user: userId,
     });
 
-    await Post.findByIdAndUpdate(postId, {
+    const post = await Post.findByIdAndUpdate(postId, {
       $push: { comments: comment._id },
+    });
+
+    await User.findOneAndUpdate({
+      _id: String(post.user),
+      $set: {
+        hasNewNotifications: true,
+      },
+    });
+
+    await Notification.create({
+      user: String(post.user),
+      body: "Somone replied on your post!",
     });
 
     return NextResponse.json(comment);
@@ -34,11 +48,25 @@ export async function PUT(req: Request) {
 
     const { commentId } = await req.json();
 
-    await Comment.findByIdAndUpdate(commentId, {
+    const comment = await Comment.findByIdAndUpdate(commentId, {
       $push: {
-        likes: currentUser._id,
+        likes: currentUser?._id,
       },
     });
+
+    await Notification.create({
+      user: String(comment.user),
+      body: "Somone liked on your replied post!",
+    });
+
+    await User.findOneAndUpdate(
+      { _id: String(comment.user) },
+      {
+        $set: {
+          hasNewNotifications: true,
+        },
+      }
+    );
 
     return NextResponse.json({ message: "Comment liked!" });
   } catch (error) {
@@ -54,11 +82,24 @@ export async function DELETE(req: Request) {
 
     const { commentId } = await req.json();
 
-    await Comment.findByIdAndUpdate(commentId, {
+    const comment = await Comment.findByIdAndUpdate(commentId, {
       $pull: {
         likes: currentUser._id,
       },
     });
+
+    console.log(comment);
+
+    await User.findOneAndUpdate(
+      { _id: String(comment.user) },
+      {
+        $set: {
+          hasNewNotifications: false,
+        },
+      }
+    );
+
+    await Notification.findOneAndDelete({ user: String(comment.user) });
 
     return NextResponse.json({ message: "Comment liked is remove!" });
   } catch (error) {

@@ -9,7 +9,7 @@ interface ButtonProps {
   disabled?: boolean;
   outline?: boolean;
   type?: "button" | "submit";
-  onClick?: () => void;
+  onClick?: (evt: any) => void;
   className?: string;
 }
 

@@ -24,3 +24,30 @@ export async function GET(req: Request, route: { params: { userId: string } }) {
     return NextResponse.json({ message: result.message }, { status: 433 });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  route: { params: { userId: string } }
+) {
+  try {
+    await connectToDatabase();
+
+    const { userId } = route.params;
+
+    await Notification.deleteMany({ user: userId });
+
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          hasNewNotifications: false,
+        },
+      },
+      { new: true }
+    );
+    return NextResponse.json({ message: "Notifications deleted!" });
+  } catch (error) {
+    const result = error as Error;
+    return NextResponse.json({ message: result.message }, { status: 433 });
+  }
+}
