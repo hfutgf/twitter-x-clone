@@ -24,6 +24,7 @@ export default function Sidebar({ user }: Props) {
       label: "Notifications",
       path: `/notifications/${user?._id}`,
       icon: Bell,
+      notification: user?.hasNewNotifications,
     },
     {
       label: "Profile",

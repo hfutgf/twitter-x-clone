@@ -107,6 +107,7 @@ const ProfileBio = ({ user, userId }: Props) => {
   return (
     <>
       <EditModal user={user} />
+      
       <div className="border-b-[1px] border-neutral-800 pb-4">
         <div className="flex justify-end p-2">
           {userId === user._id ? (
