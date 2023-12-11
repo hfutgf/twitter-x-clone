@@ -20,6 +20,7 @@ import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LoginModal() {
   const [error, setError] = useState("");
@@ -40,6 +41,8 @@ export default function LoginModal() {
     },
   });
 
+  const router = useRouter();
+
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
       const { data } = await axios.post("/api/auth/login", values);
@@ -47,6 +50,7 @@ export default function LoginModal() {
         signIn("credentials", {
           ...values,
         });
+        router.push("/");
         loginModal.onClose();
       }
     } catch (e: any) {

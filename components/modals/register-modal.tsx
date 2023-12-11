@@ -20,6 +20,7 @@ import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function RegisterModal() {
   const [step, setStep] = useState<number>(1);
@@ -169,6 +170,8 @@ function RegisterStep2({ data }: { data: { email: string; name: string } }) {
     },
   });
 
+  const router = useRouter();
+
   async function onSubmit(values: z.infer<typeof registerStep2Schema>) {
     try {
       const { data: response } = await axios.post("/api/auth/register?step=2", {
@@ -182,6 +185,7 @@ function RegisterStep2({ data }: { data: { email: string; name: string } }) {
           password: values.password,
         });
         registerModal.onClose();
+        router.push("/");
       }
     } catch (e: any) {
       if (e.response.data.error) {

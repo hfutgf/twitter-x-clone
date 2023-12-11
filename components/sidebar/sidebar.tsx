@@ -8,6 +8,7 @@ import SidebarItem from "./sidebarItem";
 import SidebarPostButton from "./sidebarPostButton";
 import SidebarAccount from "./sidebarAccount";
 import { IUser } from "@/types";
+import { MdOutlineExplore } from "react-icons/md";
 
 interface Props {
   user: IUser;
@@ -30,6 +31,11 @@ export default function Sidebar({ user }: Props) {
       label: "Profile",
       path: `/profile/${user?._id}`,
       icon: User,
+    },
+    {
+      label: "Explore",
+      path: `/explore`,
+      icon: MdOutlineExplore,
     },
   ];
 
